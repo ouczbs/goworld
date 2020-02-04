@@ -30,6 +30,8 @@ require (
 	github.com/xiaonanln/go-trie-tst v0.0.0-20171018095208-5b9678d55438
 	github.com/xiaonanln/go-xnsyncutil v0.0.5
 	github.com/xiaonanln/goTimer v0.0.3
+	github.com/xiaonanln/pktconn v0.0.0-20181130012827-7e675df35fb5
+	github.com/xiaonanln/tickchan v0.0.0-20181130012730-45de2aab1755 // indirect
 	github.com/xiaonanln/typeconv v0.0.4
 	github.com/xtaci/kcp-go v5.4.19+incompatible
 	github.com/xtaci/lossyconn v0.0.0-20190602105132-8df528c0c9ae // indirect

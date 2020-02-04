@@ -1,6 +1,7 @@
 package dispatcherclient
 
 import (
+	"github.com/xiaonanln/pktconn"
 	"time"
 
 	"net"
@@ -102,7 +103,7 @@ func (dcm *DispatcherConnMgr) connectDispatchClient() (*DispatcherClient, error)
 
 // IDispatcherClientDelegate defines functions that should be implemented by dispatcher clients
 type IDispatcherClientDelegate interface {
-	HandleDispatcherClientPacket(msgtype proto.MsgType, packet *netutil.Packet)
+	HandleDispatcherClientPacket(msgtype proto.MsgType, packet *pktconn.Packet)
 	HandleDispatcherClientDisconnect()
 	GetEntityIDsForDispatcher(dispid uint16) []common.EntityID
 }

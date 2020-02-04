@@ -54,7 +54,7 @@ func SendCallFilterClientProxies(op proto.FilterClientsOpType, key, val string, 
 	return
 }
 
-func broadcast(packet *netutil.Packet) {
+func broadcast(packet *pktconn.Packet) {
 	for _, dcm := range dispatcherConns {
 		dcm.GetDispatcherClientForSend().SendPacket(packet)
 	}

@@ -1,11 +1,11 @@
 package proto
 
 import (
+	"github.com/xiaonanln/pktconn"
 	"unsafe"
 
 	"github.com/xiaonanln/goworld/engine/common"
 	"github.com/xiaonanln/goworld/engine/gwlog"
-	"github.com/xiaonanln/goworld/engine/netutil"
 )
 
 // MsgType is the type of message types
@@ -13,7 +13,7 @@ type MsgType uint16
 
 type Message struct {
 	MsgType MsgType
-	Packet  *netutil.Packet
+	Packet  *pktconn.Packet
 }
 
 const (

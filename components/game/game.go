@@ -220,7 +220,7 @@ type _GameDispatcherClientDelegate struct {
 
 var lastWarnGateServiceQueueLen = 0
 
-func (delegate *_GameDispatcherClientDelegate) HandleDispatcherClientPacket(msgtype proto.MsgType, packet *netutil.Packet) {
+func (delegate *_GameDispatcherClientDelegate) HandleDispatcherClientPacket(msgtype proto.MsgType, packet *pktconn.Packet) {
 	gameService.packetQueue <- proto.Message{ // may block the dispatcher client routine
 		MsgType: msgtype,
 		Packet:  packet,

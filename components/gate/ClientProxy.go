@@ -7,7 +7,6 @@ import (
 
 	"github.com/xiaonanln/goworld/engine/common"
 	"github.com/xiaonanln/goworld/engine/config"
-	"github.com/xiaonanln/goworld/engine/consts"
 	"github.com/xiaonanln/goworld/engine/gwioutil"
 	"github.com/xiaonanln/goworld/engine/gwlog"
 	"github.com/xiaonanln/goworld/engine/netutil"
@@ -48,7 +47,7 @@ func (cp *ClientProxy) String() string {
 	return fmt.Sprintf("ClientProxy<%s@%s>", cp.clientid, cp.RemoteAddr())
 }
 
-//func (cp *ClientProxy) SendPacket(packet *netutil.Packet) error {
+//func (cp *ClientProxy) SendPacket(packet *pktconn.Packet) error {
 //	err := cp.GoWorldConnection.SendPacket(packet)
 //	if err != nil {
 //		return err
@@ -70,9 +69,6 @@ func (cp *ClientProxy) serve() {
 			gwlog.Debugf("%s disconnected", cp)
 		}
 	}()
-
-	cp.SetAutoFlush(consts.CLIENT_PROXY_WRITE_FLUSH_INTERVAL)
-	//cp.SendSetClientClientID(cp.cp) // set the cp on the client side
 
 	for {
 		var msgtype proto.MsgType

@@ -1205,14 +1205,14 @@ func (e *Entity) setPositionYaw(pos Vector3, yaw Yaw, fromClient bool) {
 }
 
 // CollectEntitySyncInfos is called by game service to collect and broadcast entity sync infos to all clients
-var entitySyncInfosToGate = map[uint16]*netutil.Packet{}
+var entitySyncInfosToGate = map[uint16]*pktconn.Packet{}
 
-func getEntitySyncInfosPacket(gateid uint16) *netutil.Packet {
+func getEntitySyncInfosPacket(gateid uint16) *pktconn.Packet {
 	pkt := entitySyncInfosToGate[gateid]
 	if pkt == nil {
-		pkt = netutil.NewPacket()
-		pkt.AppendUint16(proto.MT_SYNC_POSITION_YAW_ON_CLIENTS)
-		pkt.AppendUint16(gateid)
+		pkt = pktconn.NewPacket()
+		pkt.WriteUint16(proto.MT_SYNC_POSITION_YAW_ON_CLIENTS)
+		pkt.WriteUint16(gateid)
 		entitySyncInfosToGate[gateid] = pkt
 	}
 	return pkt
@@ -1262,7 +1262,7 @@ func CollectEntitySyncInfos() {
 			packet.Release()
 		}
 
-		entitySyncInfosToGate = map[uint16]*netutil.Packet{} // clear all packets
+		entitySyncInfosToGate = map[uint16]*pktconn.Packet{} // clear all packets
 	}
 }
 

@@ -42,7 +42,7 @@ type GateService struct {
 	ticker                      <-chan time.Time
 
 	filterTrees             map[string]*_FilterTree
-	pendingSyncPackets      []*netutil.Packet
+	pendingSyncPackets      []*pktconn.Packet
 	nextFlushSyncTime       time.Time
 	terminating             xnsyncutil.AtomicBool
 	terminated              *xnsyncutil.OneTimeCond
@@ -53,10 +53,10 @@ type GateService struct {
 
 func newGateService() *GateService {
 	dispIds := config.GetDispatcherIDs()
-	pendingSyncPackets := make([]*netutil.Packet, len(dispIds)) // one packet for each dispatcher
+	pendingSyncPackets := make([]*pktconn.Packet, len(dispIds)) // one packet for each dispatcher
 	for i := range pendingSyncPackets {
-		pkt := netutil.NewPacket()
-		pkt.AppendUint16(proto.MT_SYNC_POSITION_YAW_FROM_CLIENT)
+		pkt := pktconn.NewPacket()
+		pkt.WriteUint16(proto.MT_SYNC_POSITION_YAW_FROM_CLIENT)
 		pendingSyncPackets[i] = pkt
 	}
 
@@ -238,13 +238,13 @@ func (gs *GateService) onClientProxyClose(cp *ClientProxy) {
 }
 
 // HandleDispatcherClientPacket handles packets received by dispatcher client
-func (gs *GateService) handleClientProxyPacket(cp *ClientProxy, msgtype proto.MsgType, pkt *netutil.Packet) {
+func (gs *GateService) handleClientProxyPacket(cp *ClientProxy, msgtype proto.MsgType, pkt *pktconn.Packet) {
 	cp.heartbeatTime = time.Now()
 	switch msgtype {
 	case proto.MT_SYNC_POSITION_YAW_FROM_CLIENT:
 		gs.handleSyncPositionYawFromClient(pkt)
 	case proto.MT_CALL_ENTITY_METHOD_FROM_CLIENT:
-		pkt.AppendClientID(cp.clientid) // append cp to the packet
+		pkt.WriteClientID(cp.clientid) // append cp to the packet
 		eid := pkt.ReadEntityID()
 		dispatchercluster.SelectByEntityID(eid).SendPacket(pkt)
 	case proto.MT_HEARTBEAT_FROM_CLIENT:
@@ -255,7 +255,7 @@ func (gs *GateService) handleClientProxyPacket(cp *ClientProxy, msgtype proto.Ms
 
 }
 
-func (gs *GateService) handleDispatcherClientPacket(msgtype proto.MsgType, packet *netutil.Packet) {
+func (gs *GateService) handleDispatcherClientPacket(msgtype proto.MsgType, packet *pktconn.Packet) {
 	if consts.DEBUG_PACKETS {
 		gwlog.Debugf("%s.handleDispatcherClientPacket: msgtype=%v, packet(%d)=%v", gs, msgtype, packet.GetPayloadLen(), packet.Payload())
 	}
@@ -302,7 +302,7 @@ func (gs *GateService) handleDispatcherClientPacket(msgtype proto.MsgType, packe
 	}
 }
 
-func (gs *GateService) handleSetClientFilterProp(clientproxy *ClientProxy, packet *netutil.Packet) {
+func (gs *GateService) handleSetClientFilterProp(clientproxy *ClientProxy, packet *pktconn.Packet) {
 	gwlog.Debugf("%s.handleSetClientFilterProp: clientproxy=%s", gs, clientproxy)
 	key := packet.ReadVarStr()
 	val := packet.ReadVarStr()
@@ -328,7 +328,7 @@ func (gs *GateService) handleSetClientFilterProp(clientproxy *ClientProxy, packe
 	}
 }
 
-func (gs *GateService) handleClearClientFilterProps(clientproxy *ClientProxy, packet *netutil.Packet) {
+func (gs *GateService) handleClearClientFilterProps(clientproxy *ClientProxy, packet *pktconn.Packet) {
 	gwlog.Debugf("%s.handleClearClientFilterProps: clientproxy=%s", gs, clientproxy)
 
 	for key, val := range clientproxy.filterProps {
@@ -344,7 +344,7 @@ func (gs *GateService) handleClearClientFilterProps(clientproxy *ClientProxy, pa
 	}
 }
 
-func (gs *GateService) handleSyncPositionYawOnClients(packet *netutil.Packet) {
+func (gs *GateService) handleSyncPositionYawOnClients(packet *pktconn.Packet) {
 	_ = packet.ReadUint16() // read useless gateid
 	payload := packet.UnreadPayload()
 	payloadLen := len(payload)
@@ -362,7 +362,7 @@ func (gs *GateService) handleSyncPositionYawOnClients(packet *netutil.Packet) {
 	for clientid, data := range dispatch {
 		clientproxy := gs.clientProxies[clientid]
 		if clientproxy != nil {
-			packet := netutil.NewPacket()
+			packet := pktconn.NewPacket()
 			packet.AppendUint16(proto.MT_SYNC_POSITION_YAW_ON_CLIENTS)
 			packet.AppendBytes(data)
 			packet.SetNotCompress() // too many these packets, giveup compress to save time
@@ -372,7 +372,7 @@ func (gs *GateService) handleSyncPositionYawOnClients(packet *netutil.Packet) {
 	}
 }
 
-func (gs *GateService) handleCallFilteredClientProxies(packet *netutil.Packet) {
+func (gs *GateService) handleCallFilteredClientProxies(packet *pktconn.Packet) {
 	op := proto.FilterClientsOpType(packet.ReadOneByte())
 	key := packet.ReadVarStr()
 	val := packet.ReadVarStr()
@@ -397,13 +397,13 @@ func (gs *GateService) handleCallFilteredClientProxies(packet *netutil.Packet) {
 
 }
 
-func (gs *GateService) handleSyncPositionYawFromClient(packet *netutil.Packet) {
+func (gs *GateService) handleSyncPositionYawFromClient(packet *pktconn.Packet) {
 	eid := packet.ReadEntityID()
 	data := packet.ReadBytes(proto.SYNC_INFO_SIZE_PER_ENTITY)
 	dispid := dispatchercluster.EntityIDToDispatcherID(eid) // get the target dispatcher for the entity ID
 	pkt := gs.pendingSyncPackets[dispid-1]
-	pkt.AppendEntityID(eid)
-	pkt.AppendBytes(data)
+	writeEntityID(pkt, eid)
+	pkt.WriteBytes(data)
 }
 
 func (gs *GateService) tryFlushPendingSyncPackets() {
@@ -420,8 +420,8 @@ func (gs *GateService) tryFlushPendingSyncPackets() {
 
 		dispatchercluster.Select(dispidx).SendPacketRelease(pkt)
 		// create new packet for next flush
-		pkt = netutil.NewPacket()
-		pkt.AppendUint16(proto.MT_SYNC_POSITION_YAW_FROM_CLIENT)
+		pkt = pktconn.NewPacket()
+		pkt.WriteUint16(proto.MT_SYNC_POSITION_YAW_FROM_CLIENT)
 		gs.pendingSyncPackets[dispidx] = pkt
 	}
 }

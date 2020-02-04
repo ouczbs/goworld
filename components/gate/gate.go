@@ -131,7 +131,7 @@ func setupSignals() {
 type gateDispatcherClientDelegate struct {
 }
 
-func (delegate *gateDispatcherClientDelegate) HandleDispatcherClientPacket(msgtype proto.MsgType, packet *netutil.Packet) {
+func (delegate *gateDispatcherClientDelegate) HandleDispatcherClientPacket(msgtype proto.MsgType, packet *pktconn.Packet) {
 	gateService.dispatcherClientPacketQueue <- proto.Message{msgtype, packet}
 }
 

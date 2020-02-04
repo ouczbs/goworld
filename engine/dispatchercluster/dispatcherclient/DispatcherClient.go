@@ -3,7 +3,6 @@ package dispatcherclient
 import (
 	"net"
 
-	"github.com/xiaonanln/goworld/engine/consts"
 	"github.com/xiaonanln/goworld/engine/gwlog"
 	"github.com/xiaonanln/goworld/engine/netutil"
 	"github.com/xiaonanln/goworld/engine/proto"
@@ -36,7 +35,6 @@ func newDispatcherClient(dctype DispatcherClientType, conn net.Conn, isReconnect
 		isReconnect:       isReconnect,
 		isRestoreGame:     isRestoreGame,
 	}
-	dc.SetAutoFlush(consts.DISPATCHER_CLIENT_FLUSH_INTERVAL)
 	return dc
 }
 

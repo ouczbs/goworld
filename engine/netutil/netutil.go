@@ -4,8 +4,6 @@ import (
 	"io"
 	"net"
 
-	"unsafe"
-
 	"github.com/pkg/errors"
 )
 
@@ -36,8 +34,4 @@ func IsConnectionError(_err interface{}) bool {
 func ConnectTCP(addr string) (net.Conn, error) {
 	conn, err := net.Dial("tcp", addr)
 	return conn, err
-}
-
-func PutFloat32(b []byte, f float32) {
-	NETWORK_ENDIAN.PutUint32(b, *(*uint32)(unsafe.Pointer(&f)))
 }

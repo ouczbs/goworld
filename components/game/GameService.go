@@ -289,7 +289,7 @@ func (gs *GameService) HandleLoadEntitySomewhere(typeName string, entityID commo
 	entity.OnLoadEntitySomewhere(typeName, entityID)
 }
 
-func (gs *GameService) HandleSrvdisRegister(pkt *netutil.Packet) {
+func (gs *GameService) HandleSrvdisRegister(pkt *pktconn.Packet) {
 	// tell the entity that it is registered successfully
 	srvid := pkt.ReadVarStr()
 	srvinfo := pkt.ReadVarStr()
@@ -315,7 +315,7 @@ func (gs *GameService) HandleStartFreezeGameAck(dispid uint16) {
 	gs.runState.Store(rsFreezing)
 }
 
-func (gs *GameService) handleNotifyGameConnected(pkt *netutil.Packet) {
+func (gs *GameService) handleNotifyGameConnected(pkt *pktconn.Packet) {
 	gameid := pkt.ReadUint16() // the new connected game
 	if gs.onlineGames.Contains(gameid) {
 		// should not happen
@@ -327,7 +327,7 @@ func (gs *GameService) handleNotifyGameConnected(pkt *netutil.Packet) {
 	gwlog.Infof("%s notify game connected: %d online games currently", gs, len(gs.onlineGames))
 }
 
-func (gs *GameService) handleNotifyGameDisconnected(pkt *netutil.Packet) {
+func (gs *GameService) handleNotifyGameDisconnected(pkt *pktconn.Packet) {
 	gameid := pkt.ReadUint16()
 
 	if !gs.onlineGames.Contains(gameid) {
@@ -340,11 +340,11 @@ func (gs *GameService) handleNotifyGameDisconnected(pkt *netutil.Packet) {
 	gwlog.Infof("%s notify game disconnected: %d online games left", gs, len(gs.onlineGames))
 }
 
-func (gs *GameService) handleNotifyDeploymentReady(pkt *netutil.Packet) {
+func (gs *GameService) handleNotifyDeploymentReady(pkt *pktconn.Packet) {
 	gs.onDeploymentReady()
 }
 
-func (gs *GameService) handleSetGameIDAck(pkt *netutil.Packet) {
+func (gs *GameService) handleSetGameIDAck(pkt *pktconn.Packet) {
 	dispid := pkt.ReadUint16() // dispatcher  that sent the SET_GAME_ID_ACK
 	isDeploymentReady := pkt.ReadBool()
 
@@ -395,7 +395,7 @@ func (gs *GameService) onDeploymentReady() {
 	service.OnDeploymentReady()
 }
 
-func (gs *GameService) HandleSyncPositionYawFromClient(pkt *netutil.Packet) {
+func (gs *GameService) HandleSyncPositionYawFromClient(pkt *pktconn.Packet) {
 	//gwlog.Infof("handleSyncPositionYawFromClient: payload %d", len(pkt.UnreadPayload()))
 	payload := pkt.UnreadPayload()
 	payloadLen := len(payload)
@@ -444,14 +444,14 @@ func (gs *GameService) HandleNotifyClientDisconnected(ownerID common.EntityID, c
 	entity.OnClientDisconnected(ownerID, clientid)
 }
 
-func (gs *GameService) HandleQuerySpaceGameIDForMigrateAck(pkt *netutil.Packet) {
+func (gs *GameService) HandleQuerySpaceGameIDForMigrateAck(pkt *pktconn.Packet) {
 	spaceid := pkt.ReadEntityID()
 	entityid := pkt.ReadEntityID()
 	gameid := pkt.ReadUint16()
 	entity.OnQuerySpaceGameIDForMigrateAck(entityid, spaceid, gameid)
 }
 
-func (gs *GameService) HandleMigrateRequestAck(pkt *netutil.Packet) {
+func (gs *GameService) HandleMigrateRequestAck(pkt *pktconn.Packet) {
 	eid := pkt.ReadEntityID()
 	spaceid := pkt.ReadEntityID()
 	spaceLoc := pkt.ReadUint16()
@@ -463,7 +463,7 @@ func (gs *GameService) HandleMigrateRequestAck(pkt *netutil.Packet) {
 	entity.OnMigrateRequestAck(eid, spaceid, spaceLoc)
 }
 
-func (gs *GameService) HandleRealMigrate(pkt *netutil.Packet) {
+func (gs *GameService) HandleRealMigrate(pkt *pktconn.Packet) {
 	eid := pkt.ReadEntityID()
 	_ = pkt.ReadUint16() // targetGame is not userful
 	data := pkt.ReadVarBytes()

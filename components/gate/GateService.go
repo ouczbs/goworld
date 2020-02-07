@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"github.com/xiaonanln/pktconn"
 	"time"
 
 	"golang.org/x/net/websocket"
@@ -28,21 +29,16 @@ import (
 	"github.com/xtaci/kcp-go"
 )
 
-type clientProxyMessage struct {
-	cp  *ClientProxy
-	msg proto.Message
-}
-
 // GateService implements the gate service logic
 type GateService struct {
 	listenAddr                  string
 	clientProxies               map[common.ClientID]*ClientProxy
-	dispatcherClientPacketQueue chan proto.Message
-	clientPacketQueue           chan clientProxyMessage
+	dispatcherClientPacketQueue chan *pktconn.Packet
+	clientPacketQueue           chan *pktconn.Packet
 	ticker                      <-chan time.Time
 
 	filterTrees             map[string]*_FilterTree
-	pendingSyncPackets      []*pktconn.Packet
+	pendingSyncPackets      []netutil.GWPacket
 	nextFlushSyncTime       time.Time
 	terminating             xnsyncutil.AtomicBool
 	terminated              *xnsyncutil.OneTimeCond
@@ -53,9 +49,9 @@ type GateService struct {
 
 func newGateService() *GateService {
 	dispIds := config.GetDispatcherIDs()
-	pendingSyncPackets := make([]*pktconn.Packet, len(dispIds)) // one packet for each dispatcher
+	pendingSyncPackets := make([]netutil.GWPacket, len(dispIds)) // one packet for each dispatcher
 	for i := range pendingSyncPackets {
-		pkt := pktconn.NewPacket()
+		pkt := netutil.NewPacket()
 		pkt.WriteUint16(proto.MT_SYNC_POSITION_YAW_FROM_CLIENT)
 		pendingSyncPackets[i] = pkt
 	}
@@ -63,8 +59,8 @@ func newGateService() *GateService {
 	return &GateService{
 		//dispatcherClientPacketQueue: make(chan packetQueueItem, consts.DISPATCHER_CLIENT_PACKET_QUEUE_SIZE),
 		clientProxies:               map[common.ClientID]*ClientProxy{},
-		dispatcherClientPacketQueue: make(chan proto.Message, consts.GATE_SERVICE_PACKET_QUEUE_SIZE),
-		clientPacketQueue:           make(chan clientProxyMessage, consts.GATE_SERVICE_PACKET_QUEUE_SIZE),
+		dispatcherClientPacketQueue: make(chan *pktconn.Packet, consts.GATE_SERVICE_PACKET_QUEUE_SIZE),
+		clientPacketQueue:           make(chan *pktconn.Packet, consts.GATE_SERVICE_PACKET_QUEUE_SIZE),
 		ticker:                      time.Tick(consts.GATE_SERVICE_TICK_INTERVAL),
 		filterTrees:                 map[string]*_FilterTree{},
 		pendingSyncPackets:          pendingSyncPackets,
@@ -237,8 +233,7 @@ func (gs *GateService) onClientProxyClose(cp *ClientProxy) {
 	}
 }
 
-// HandleDispatcherClientPacket handles packets received by dispatcher client
-func (gs *GateService) handleClientProxyPacket(cp *ClientProxy, msgtype proto.MsgType, pkt *pktconn.Packet) {
+func (gs *GateService) handleClientProxyPacket(cp *ClientProxy, msgtype proto.MsgType, pkt netutil.GWPacket) {
 	cp.heartbeatTime = time.Now()
 	switch msgtype {
 	case proto.MT_SYNC_POSITION_YAW_FROM_CLIENT:
@@ -252,10 +247,9 @@ func (gs *GateService) handleClientProxyPacket(cp *ClientProxy, msgtype proto.Ms
 	default:
 		gwlog.Panicf("unknown message type from client: %d", msgtype)
 	}
-
 }
 
-func (gs *GateService) handleDispatcherClientPacket(msgtype proto.MsgType, packet *pktconn.Packet) {
+func (gs *GateService) handleDispatcherClientPacket(msgtype proto.MsgType, packet netutil.GWPacket) {
 	if consts.DEBUG_PACKETS {
 		gwlog.Debugf("%s.handleDispatcherClientPacket: msgtype=%v, packet(%d)=%v", gs, msgtype, packet.GetPayloadLen(), packet.Payload())
 	}
@@ -302,7 +296,7 @@ func (gs *GateService) handleDispatcherClientPacket(msgtype proto.MsgType, packe
 	}
 }
 
-func (gs *GateService) handleSetClientFilterProp(clientproxy *ClientProxy, packet *pktconn.Packet) {
+func (gs *GateService) handleSetClientFilterProp(clientproxy *ClientProxy, packet netutil.GWPacket) {
 	gwlog.Debugf("%s.handleSetClientFilterProp: clientproxy=%s", gs, clientproxy)
 	key := packet.ReadVarStr()
 	val := packet.ReadVarStr()
@@ -328,7 +322,7 @@ func (gs *GateService) handleSetClientFilterProp(clientproxy *ClientProxy, packe
 	}
 }
 
-func (gs *GateService) handleClearClientFilterProps(clientproxy *ClientProxy, packet *pktconn.Packet) {
+func (gs *GateService) handleClearClientFilterProps(clientproxy *ClientProxy, packet netutil.GWPacket) {
 	gwlog.Debugf("%s.handleClearClientFilterProps: clientproxy=%s", gs, clientproxy)
 
 	for key, val := range clientproxy.filterProps {
@@ -344,7 +338,7 @@ func (gs *GateService) handleClearClientFilterProps(clientproxy *ClientProxy, pa
 	}
 }
 
-func (gs *GateService) handleSyncPositionYawOnClients(packet *pktconn.Packet) {
+func (gs *GateService) handleSyncPositionYawOnClients(packet netutil.GWPacket) {
 	_ = packet.ReadUint16() // read useless gateid
 	payload := packet.UnreadPayload()
 	payloadLen := len(payload)
@@ -362,9 +356,9 @@ func (gs *GateService) handleSyncPositionYawOnClients(packet *pktconn.Packet) {
 	for clientid, data := range dispatch {
 		clientproxy := gs.clientProxies[clientid]
 		if clientproxy != nil {
-			packet := pktconn.NewPacket()
-			packet.AppendUint16(proto.MT_SYNC_POSITION_YAW_ON_CLIENTS)
-			packet.AppendBytes(data)
+			packet := netutil.NewPacket()
+			packet.WriteUint16(proto.MT_SYNC_POSITION_YAW_ON_CLIENTS)
+			packet.WriteBytes(data)
 			packet.SetNotCompress() // too many these packets, giveup compress to save time
 			clientproxy.SendPacket(packet)
 			packet.Release()
@@ -372,7 +366,7 @@ func (gs *GateService) handleSyncPositionYawOnClients(packet *pktconn.Packet) {
 	}
 }
 
-func (gs *GateService) handleCallFilteredClientProxies(packet *pktconn.Packet) {
+func (gs *GateService) handleCallFilteredClientProxies(packet netutil.GWPacket) {
 	op := proto.FilterClientsOpType(packet.ReadOneByte())
 	key := packet.ReadVarStr()
 	val := packet.ReadVarStr()
@@ -397,12 +391,12 @@ func (gs *GateService) handleCallFilteredClientProxies(packet *pktconn.Packet) {
 
 }
 
-func (gs *GateService) handleSyncPositionYawFromClient(packet *pktconn.Packet) {
+func (gs *GateService) handleSyncPositionYawFromClient(packet netutil.GWPacket) {
 	eid := packet.ReadEntityID()
 	data := packet.ReadBytes(proto.SYNC_INFO_SIZE_PER_ENTITY)
 	dispid := dispatchercluster.EntityIDToDispatcherID(eid) // get the target dispatcher for the entity ID
 	pkt := gs.pendingSyncPackets[dispid-1]
-	writeEntityID(pkt, eid)
+	pkt.WriteEntityID(eid)
 	pkt.WriteBytes(data)
 }
 
@@ -420,7 +414,7 @@ func (gs *GateService) tryFlushPendingSyncPackets() {
 
 		dispatchercluster.Select(dispidx).SendPacketRelease(pkt)
 		// create new packet for next flush
-		pkt = pktconn.NewPacket()
+		pkt = netutil.NewPacket()
 		pkt.WriteUint16(proto.MT_SYNC_POSITION_YAW_FROM_CLIENT)
 		gs.pendingSyncPackets[dispidx] = pkt
 	}

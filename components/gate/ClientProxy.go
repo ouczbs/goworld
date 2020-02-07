@@ -7,7 +7,6 @@ import (
 
 	"github.com/xiaonanln/goworld/engine/common"
 	"github.com/xiaonanln/goworld/engine/config"
-	"github.com/xiaonanln/goworld/engine/gwioutil"
 	"github.com/xiaonanln/goworld/engine/gwlog"
 	"github.com/xiaonanln/goworld/engine/netutil"
 	"github.com/xiaonanln/goworld/engine/post"
@@ -47,7 +46,7 @@ func (cp *ClientProxy) String() string {
 	return fmt.Sprintf("ClientProxy<%s@%s>", cp.clientid, cp.RemoteAddr())
 }
 
-//func (cp *ClientProxy) SendPacket(packet *pktconn.Packet) error {
+//func (cp *ClientProxy) SendPacket(packet *pktconn.GWPacket) error {
 //	err := cp.GoWorldConnection.SendPacket(packet)
 //	if err != nil {
 //		return err
@@ -70,17 +69,8 @@ func (cp *ClientProxy) serve() {
 		}
 	}()
 
-	for {
-		var msgtype proto.MsgType
-		pkt, err := cp.Recv(&msgtype)
-		if pkt != nil {
-			gateService.clientPacketQueue <- clientProxyMessage{cp, proto.Message{msgtype, pkt}}
-		} else if err != nil && !gwioutil.IsTimeoutError(err) {
-			if netutil.IsConnectionError(err) {
-				break
-			} else {
-				panic(err)
-			}
-		}
+	err := cp.Recv(gateService.clientPacketQueue)
+	if err != nil && !netutil.IsConnectionError(err) {
+		gwlog.Errorf("ClientProxy: Recv error: %+v", err)
 	}
 }

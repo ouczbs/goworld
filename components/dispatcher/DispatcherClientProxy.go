@@ -44,6 +44,7 @@ func (dcp *dispatcherClientProxy) serve() {
 	}()
 
 	gwlog.Infof("New dispatcher client: %s", dcp)
+	dcp.Recv(dcp.owner.messageQueue)
 	for {
 		var msgtype proto.MsgType
 		pkt, err := dcp.Recv(&msgtype)
@@ -57,11 +58,6 @@ func (dcp *dispatcherClientProxy) serve() {
 
 			gwlog.Panic(err)
 		}
-
-		//
-		//if consts.DEBUG_PACKETS {
-		//	gwlog.Debugf("%s.RecvPacket: msgtype=%v, payload=%v", dcp, msgtype, pkt.Payload())
-		//}
 
 		// pass the packet to the dispatcher service
 		dcp.owner.messageQueue <- dispatcherMessage{dcp, proto.Message{msgtype, pkt}}

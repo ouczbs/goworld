@@ -17,7 +17,7 @@ require (
 	github.com/klauspost/reedsolomon v1.9.3 // indirect
 	github.com/petar/GoLLRB v0.0.0-20190514000832-33fb24c13b99
 	github.com/pierrec/lz4 v2.3.0+incompatible
-	github.com/pkg/errors v0.8.1
+	github.com/pkg/errors v0.9.1
 	github.com/sevlyar/go-daemon v0.1.5
 	github.com/shirou/gopsutil v2.19.11+incompatible
 	github.com/shirou/w32 v0.0.0-20160930032740-bb4de0191aa4 // indirect
@@ -30,7 +30,7 @@ require (
 	github.com/xiaonanln/go-trie-tst v0.0.0-20171018095208-5b9678d55438
 	github.com/xiaonanln/go-xnsyncutil v0.0.5
 	github.com/xiaonanln/goTimer v0.0.3
-	github.com/xiaonanln/pktconn v0.0.0-20181130012827-7e675df35fb5
+	github.com/xiaonanln/pktconn v0.0.0-20200206154948-4ca31f7eb154
 	github.com/xiaonanln/tickchan v0.0.0-20181130012730-45de2aab1755 // indirect
 	github.com/xiaonanln/typeconv v0.0.4
 	github.com/xtaci/kcp-go v5.4.19+incompatible

@@ -1210,7 +1210,7 @@ var entitySyncInfosToGate = map[uint16]*pktconn.Packet{}
 func getEntitySyncInfosPacket(gateid uint16) *pktconn.Packet {
 	pkt := entitySyncInfosToGate[gateid]
 	if pkt == nil {
-		pkt = pktconn.NewPacket()
+		pkt = netutil.NewPacket()
 		pkt.WriteUint16(proto.MT_SYNC_POSITION_YAW_ON_CLIENTS)
 		pkt.WriteUint16(gateid)
 		entitySyncInfosToGate[gateid] = pkt

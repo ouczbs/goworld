@@ -3,9 +3,9 @@ package kvreg
 import (
 	"strings"
 
-	"github.com/xiaonanln/goworld/engine/dispatchercluster"
-	"github.com/xiaonanln/goworld/engine/gwlog"
-	"github.com/xiaonanln/goworld/engine/post"
+	"github.com/ouczbs/goworld/engine/dispatchercluster"
+	"github.com/ouczbs/goworld/engine/gwlog"
+	"github.com/ouczbs/goworld/engine/post"
 )
 
 type RegisterCallback func(ok bool)

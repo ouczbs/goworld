@@ -9,8 +9,8 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/xiaonanln/goworld/engine/consts"
-	"github.com/xiaonanln/goworld/engine/gwlog"
+	"github.com/ouczbs/goworld/engine/consts"
+	"github.com/ouczbs/goworld/engine/gwlog"
 )
 
 var (

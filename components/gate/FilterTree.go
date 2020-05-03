@@ -4,9 +4,9 @@ import (
 	"unsafe"
 
 	llrb "github.com/petar/GoLLRB/llrb"
-	"github.com/xiaonanln/goworld/engine/gwlog"
-	"github.com/xiaonanln/goworld/engine/gwutils"
-	"github.com/xiaonanln/goworld/engine/proto"
+	"github.com/ouczbs/goworld/engine/gwlog"
+	"github.com/ouczbs/goworld/engine/gwutils"
+	"github.com/ouczbs/goworld/engine/proto"
 )
 
 type _FilterTree struct {

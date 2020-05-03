@@ -3,8 +3,8 @@ package entity
 import (
 	"testing"
 
-	"github.com/xiaonanln/goworld/engine/common"
-	"github.com/xiaonanln/goworld/engine/netutil"
+	"github.com/ouczbs/goworld/engine/common"
+	"github.com/ouczbs/goworld/engine/netutil"
 )
 
 type TestEntity struct {

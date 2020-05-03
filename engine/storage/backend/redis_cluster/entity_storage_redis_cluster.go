@@ -7,9 +7,9 @@ import (
 
 	redis "github.com/chasex/redis-go-cluster"
 	"github.com/pkg/errors"
-	"github.com/xiaonanln/goworld/engine/common"
-	"github.com/xiaonanln/goworld/engine/netutil"
-	"github.com/xiaonanln/goworld/engine/storage/storage_common"
+	"github.com/ouczbs/goworld/engine/common"
+	"github.com/ouczbs/goworld/engine/netutil"
+	"github.com/ouczbs/goworld/engine/storage/storage_common"
 )
 
 var (

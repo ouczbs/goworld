@@ -6,12 +6,12 @@ import (
 
 	"fmt"
 
-	"github.com/xiaonanln/goworld/engine/consts"
-	"github.com/xiaonanln/goworld/engine/gwioutil"
-	"github.com/xiaonanln/goworld/engine/gwlog"
-	"github.com/xiaonanln/goworld/engine/netutil"
-	"github.com/xiaonanln/goworld/engine/post"
-	"github.com/xiaonanln/goworld/engine/proto"
+	"github.com/ouczbs/goworld/engine/consts"
+	"github.com/ouczbs/goworld/engine/gwioutil"
+	"github.com/ouczbs/goworld/engine/gwlog"
+	"github.com/ouczbs/goworld/engine/netutil"
+	"github.com/ouczbs/goworld/engine/post"
+	"github.com/ouczbs/goworld/engine/proto"
 )
 
 type dispatcherClientProxy struct {

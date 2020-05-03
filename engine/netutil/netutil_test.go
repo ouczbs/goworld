@@ -9,8 +9,8 @@ import (
 
 	"fmt"
 
-	"github.com/xiaonanln/goworld/engine/gwioutil"
-	"github.com/xiaonanln/goworld/engine/gwlog"
+	"github.com/ouczbs/goworld/engine/gwioutil"
+	"github.com/ouczbs/goworld/engine/gwlog"
 )
 
 type testEchoTcpServer struct {

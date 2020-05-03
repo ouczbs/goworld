@@ -12,11 +12,11 @@ import (
 
 	"runtime/debug"
 
-	"github.com/xiaonanln/goworld/engine/binutil"
-	"github.com/xiaonanln/goworld/engine/config"
-	"github.com/xiaonanln/goworld/engine/consts"
-	"github.com/xiaonanln/goworld/engine/gwlog"
-	"github.com/xiaonanln/goworld/engine/post"
+	"github.com/ouczbs/goworld/engine/binutil"
+	"github.com/ouczbs/goworld/engine/config"
+	"github.com/ouczbs/goworld/engine/consts"
+	"github.com/ouczbs/goworld/engine/gwlog"
+	"github.com/ouczbs/goworld/engine/post"
 )
 
 var (

@@ -6,9 +6,9 @@ import (
 
 	"io"
 
-	"github.com/xiaonanln/goworld/engine/common"
-	"github.com/xiaonanln/goworld/engine/gwlog"
-	"github.com/xiaonanln/goworld/engine/storage/storage_common"
+	"github.com/ouczbs/goworld/engine/common"
+	"github.com/ouczbs/goworld/engine/gwlog"
+	"github.com/ouczbs/goworld/engine/storage/storage_common"
 )
 
 const (

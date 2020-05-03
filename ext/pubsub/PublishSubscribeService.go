@@ -2,10 +2,10 @@ package pubsub
 
 import (
 	"github.com/xiaonanln/go-trie-tst"
-	"github.com/xiaonanln/goworld"
-	"github.com/xiaonanln/goworld/engine/common"
-	"github.com/xiaonanln/goworld/engine/entity"
-	"github.com/xiaonanln/goworld/engine/gwlog"
+	"github.com/ouczbs/goworld"
+	"github.com/ouczbs/goworld/engine/common"
+	"github.com/ouczbs/goworld/engine/entity"
+	"github.com/ouczbs/goworld/engine/gwlog"
 )
 
 const (

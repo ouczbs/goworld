@@ -5,7 +5,7 @@ import (
 	"syscall"
 	"time"
 
-	"github.com/xiaonanln/goworld/cmd/goworld/process"
+	"github.com/ouczbs/goworld/cmd/goworld/process"
 )
 
 func stop(sid ServerID) {

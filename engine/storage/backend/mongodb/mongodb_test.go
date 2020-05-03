@@ -3,8 +3,8 @@ package entitystoragemongodb
 import (
 	"testing"
 
-	"github.com/xiaonanln/goworld/engine/common"
-	"github.com/xiaonanln/goworld/engine/gwlog"
+	"github.com/ouczbs/goworld/engine/common"
+	"github.com/ouczbs/goworld/engine/gwlog"
 )
 
 func TestMongoDBEntityStorage(t *testing.T) {

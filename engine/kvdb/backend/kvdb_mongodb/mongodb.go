@@ -5,8 +5,8 @@ import (
 
 	"io"
 
-	"github.com/xiaonanln/goworld/engine/gwlog"
-	"github.com/xiaonanln/goworld/engine/kvdb/types"
+	"github.com/ouczbs/goworld/engine/gwlog"
+	"github.com/ouczbs/goworld/engine/kvdb/types"
 	"gopkg.in/mgo.v2/bson"
 )
 

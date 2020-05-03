@@ -7,7 +7,7 @@ import (
 
 	redis "github.com/chasex/redis-go-cluster"
 	"github.com/pkg/errors"
-	"github.com/xiaonanln/goworld/engine/kvdb/types"
+	"github.com/ouczbs/goworld/engine/kvdb/types"
 )
 
 const (

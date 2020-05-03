@@ -4,7 +4,7 @@ import (
 	"net/http"
 	"syscall"
 
-	"github.com/xiaonanln/goworld/engine/gwlog"
+	"github.com/ouczbs/goworld/engine/gwlog"
 	"golang.org/x/net/websocket"
 )
 

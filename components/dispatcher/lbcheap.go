@@ -3,9 +3,9 @@ package main
 import (
 	"container/heap"
 
-	"github.com/xiaonanln/goworld/engine/config"
-	"github.com/xiaonanln/goworld/engine/gwlog"
-	"github.com/xiaonanln/goworld/engine/proto"
+	"github.com/ouczbs/goworld/engine/config"
+	"github.com/ouczbs/goworld/engine/gwlog"
+	"github.com/ouczbs/goworld/engine/proto"
 )
 
 type lbcheapentry struct {

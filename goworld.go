@@ -2,14 +2,14 @@ package goworld
 
 import (
 	"github.com/xiaonanln/goTimer"
-	"github.com/xiaonanln/goworld/components/game"
-	"github.com/xiaonanln/goworld/engine/common"
-	"github.com/xiaonanln/goworld/engine/crontab"
-	"github.com/xiaonanln/goworld/engine/entity"
-	"github.com/xiaonanln/goworld/engine/kvdb"
-	"github.com/xiaonanln/goworld/engine/post"
-	"github.com/xiaonanln/goworld/engine/service"
-	"github.com/xiaonanln/goworld/engine/storage"
+	"github.com/ouczbs/goworld/components/game"
+	"github.com/ouczbs/goworld/engine/common"
+	"github.com/ouczbs/goworld/engine/crontab"
+	"github.com/ouczbs/goworld/engine/entity"
+	"github.com/ouczbs/goworld/engine/kvdb"
+	"github.com/ouczbs/goworld/engine/post"
+	"github.com/ouczbs/goworld/engine/service"
+	"github.com/ouczbs/goworld/engine/storage"
 	"time"
 )
 

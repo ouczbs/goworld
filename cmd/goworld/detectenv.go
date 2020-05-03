@@ -7,7 +7,7 @@ import (
 	"path/filepath"
 	"strings"
 
-	"github.com/xiaonanln/goworld/engine/config"
+	"github.com/ouczbs/goworld/engine/config"
 )
 
 // Env represents environment variables

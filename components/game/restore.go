@@ -5,8 +5,8 @@ import (
 	"io/ioutil"
 	"time"
 
-	"github.com/xiaonanln/goworld/engine/entity"
-	"github.com/xiaonanln/goworld/engine/gwlog"
+	"github.com/ouczbs/goworld/engine/entity"
+	"github.com/ouczbs/goworld/engine/gwlog"
 )
 
 func freezeFilename(gameid uint16) string {

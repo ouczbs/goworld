@@ -3,10 +3,10 @@ package async
 import (
 	"sync"
 
-	"github.com/xiaonanln/goworld/engine/consts"
-	"github.com/xiaonanln/goworld/engine/gwlog"
-	"github.com/xiaonanln/goworld/engine/gwutils"
-	"github.com/xiaonanln/goworld/engine/post"
+	"github.com/ouczbs/goworld/engine/consts"
+	"github.com/ouczbs/goworld/engine/gwlog"
+	"github.com/ouczbs/goworld/engine/gwutils"
+	"github.com/ouczbs/goworld/engine/post"
 	"golang.org/x/net/context"
 )
 

@@ -1,7 +1,7 @@
-module github.com/xiaonanln/goworld
+module github.com/ouczbs/goworld
 
-go 1.13
-
+go 1.14
+replace github.com/ouczbs/goworld => ../goworld
 require (
 	github.com/StackExchange/wmi v0.0.0-20190523213315-cbe66965904d // indirect
 	github.com/bmizerany/assert v0.0.0-20160611221934-b7ed37b82869

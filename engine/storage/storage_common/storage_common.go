@@ -1,6 +1,6 @@
 package storagecommon
 
-import "github.com/xiaonanln/goworld/engine/common"
+import "github.com/ouczbs/goworld/engine/common"
 
 // EntityStorage defines the interface of entity storage backends
 type EntityStorage interface {

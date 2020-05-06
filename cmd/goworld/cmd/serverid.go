@@ -1,8 +1,7 @@
-package main
+package cmd
 
 import (
 	"path"
-	"path/filepath"
 	"strings"
 )
 
@@ -13,7 +12,8 @@ type ServerID string
 func (sid ServerID) Path() string {
 	serverPath := strings.Split(string(sid), "/")
 	serverPath = append([]string{env.GoWorldRoot}, serverPath...)
-	return filepath.Join(serverPath...)
+	//return filepath.Join(serverPath...)
+	return env.GoWorldRoot
 }
 
 // Name returns the name of the server

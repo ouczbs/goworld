@@ -1,4 +1,4 @@
-package main
+package dispatcher
 
 import (
 	"github.com/xiaonanln/netconnutil"

@@ -1,4 +1,4 @@
-package main
+package cmd
 
 import (
 	"path/filepath"
@@ -10,7 +10,7 @@ import (
 	"github.com/ouczbs/goworld/engine/config"
 )
 
-// ServerStatus represents the status of a server
+// ServerStatus represents the Status of a server
 type ServerStatus struct {
 	NumDispatcherRunning int
 	NumGatesRunning      int
@@ -86,13 +86,13 @@ func detectServerStatus() *ServerStatus {
 	return ss
 }
 
-func status() {
+func Status() {
 	ss := detectServerStatus()
 	showServerStatus(ss)
 }
 
 func showServerStatus(ss *ServerStatus) {
-	showMsg("%d dispatcher running, %d/%d gates running, %d/%d games (%s) running", ss.NumDispatcherRunning,
+	ShowMsg("%d dispatcher running, %d/%d gates running, %d/%d games (%s) running", ss.NumDispatcherRunning,
 		ss.NumGatesRunning, config.GetDeployment().DesiredGates,
 		ss.NumGamesRunning, config.GetDeployment().DesiredGames,
 		ss.ServerID,
@@ -111,6 +111,6 @@ func showServerStatus(ss *ServerStatus) {
 			cmdline = fmt.Sprintf("get cmdline failed: %e", err)
 		}
 
-		showMsg("\t%-10d%-16s%s", proc.Pid(), proc.Executable(), cmdline)
+		ShowMsg("\t%-10d%-16s%s", proc.Pid(), proc.Executable(), cmdline)
 	}
 }

@@ -1,4 +1,4 @@
-package main
+package dispatcher
 
 import (
 	"fmt"
@@ -13,7 +13,6 @@ import (
 
 	"container/heap"
 
-	"github.com/pkg/errors"
 	"github.com/ouczbs/goworld/engine/binutil"
 	"github.com/ouczbs/goworld/engine/common"
 	"github.com/ouczbs/goworld/engine/config"
@@ -23,6 +22,7 @@ import (
 	"github.com/ouczbs/goworld/engine/netutil"
 	"github.com/ouczbs/goworld/engine/post"
 	"github.com/ouczbs/goworld/engine/proto"
+	"github.com/pkg/errors"
 )
 
 type entityDispatchInfo struct {

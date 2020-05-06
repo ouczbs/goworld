@@ -1,0 +1,38 @@
+syntax = "proto3";
+package pb;
+option go_package = ".;pb";
+
+message SET_GAME_ID
+{
+  uint32  GameId   = 1;
+  bool   IsReconnect  = 2; 
+  bool   IsRestore  = 3 ; 
+  bool   IsBanBootEntity  = 4 ;
+  repeated string  EntityIdList   = 5; 
+}
+
+message SET_GATE_ID
+{
+  uint32  GateId   = 1;
+}
+message NOTIFY_CREATE_ENTITY
+{
+    string  EntityId   = 1;
+}
+message NOTIFY_DESTROY_ENTITY
+{
+    string  EntityId   = 1;
+}
+message KVREG_REGISTER
+{
+    string  SrvId   = 1;
+    string  Info   = 2;
+    bool Force =3;
+}
+message CREATE_ENTITY_SOMEWHERE
+{
+    uint32  GameId   = 1;
+    string  EntityId   = 2;
+    string TypeName =3;
+    string Data =4;
+}

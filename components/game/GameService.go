@@ -2,13 +2,12 @@ package game
 
 import (
 	"fmt"
+	"github.com/ouczbs/goworld/engine/gwutils"
 
 	"time"
 
 	"io/ioutil"
 
-	"github.com/xiaonanln/go-xnsyncutil/xnsyncutil"
-	"github.com/xiaonanln/goTimer"
 	"github.com/ouczbs/goworld/engine/async"
 	"github.com/ouczbs/goworld/engine/binutil"
 	"github.com/ouczbs/goworld/engine/common"
@@ -17,7 +16,6 @@ import (
 	"github.com/ouczbs/goworld/engine/dispatchercluster"
 	"github.com/ouczbs/goworld/engine/entity"
 	"github.com/ouczbs/goworld/engine/gwlog"
-	"github.com/ouczbs/goworld/engine/gwutils"
 	"github.com/ouczbs/goworld/engine/gwvar"
 	"github.com/ouczbs/goworld/engine/kvdb"
 	"github.com/ouczbs/goworld/engine/kvreg"
@@ -25,6 +23,8 @@ import (
 	"github.com/ouczbs/goworld/engine/post"
 	"github.com/ouczbs/goworld/engine/proto"
 	"github.com/ouczbs/goworld/engine/service"
+	"github.com/xiaonanln/go-xnsyncutil/xnsyncutil"
+	"github.com/xiaonanln/goTimer"
 )
 
 const (

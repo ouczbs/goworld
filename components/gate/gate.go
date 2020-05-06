@@ -1,4 +1,4 @@
-package main
+package gate
 
 import (
 	"flag"
@@ -54,7 +54,7 @@ func parseArgs() {
 	args.gateid = uint16(gateIdArg)
 }
 
-func main() {
+func RunGate() {
 	rand.Seed(time.Now().UnixNano())
 	parseArgs()
 

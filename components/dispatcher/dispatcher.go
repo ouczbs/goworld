@@ -1,4 +1,4 @@
-package main
+package dispatcher
 
 import (
 	"os"
@@ -26,7 +26,7 @@ var (
 	logLevel          string
 	runInDaemonMode   bool
 	sigChan           = make(chan os.Signal, 1)
-	dispatcherService *DispatcherService
+	dispatcherService * DispatcherService
 )
 
 func parseArgs() {
@@ -42,7 +42,7 @@ func setupGCPercent() {
 	debug.SetGCPercent(consts.DISPATCHER_GC_PERCENT)
 }
 
-func main() {
+func RunDispatvher() {
 	parseArgs()
 	if runInDaemonMode {
 		daemoncontext := binutil.Daemonize()

@@ -1,4 +1,4 @@
-// +build windows
+// +Build windows
 
 package process
 

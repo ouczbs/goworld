@@ -1,4 +1,4 @@
-package main
+package cmd
 
 import (
 	"os"
@@ -7,7 +7,7 @@ import (
 	"github.com/ouczbs/goworld/engine/config"
 )
 
-func reload(sid ServerID) {
+func Reload(sid ServerID) {
 	err := os.Chdir(env.GoWorldRoot)
 	checkErrorOrQuit(err, "chdir to goworld directory failed")
 
@@ -15,19 +15,19 @@ func reload(sid ServerID) {
 	showServerStatus(ss)
 	if !ss.IsRunning() {
 		// server is not running
-		showMsgAndQuit("no server is running currently")
+		ShowMsgAndQuit("no server is running currently")
 	}
 
 	if ss.ServerID != "" && ss.ServerID != sid {
-		showMsgAndQuit("another server is running: %s", ss.ServerID)
+		ShowMsgAndQuit("another server is running: %s", ss.ServerID)
 	}
 
 	if ss.NumGamesRunning == 0 {
-		showMsgAndQuit("no game is running")
+		ShowMsgAndQuit("no game is running")
 	} else if ss.NumGamesRunning != config.GetDeployment().DesiredGames {
-		showMsgAndQuit("found %d games, but should have %d", ss.NumGamesRunning, config.GetDeployment().DesiredGames)
+		ShowMsgAndQuit("found %d games, but should have %d", ss.NumGamesRunning, config.GetDeployment().DesiredGames)
 	}
 
-	stopGames(ss, binutil.FreezeSignal)
-	startGames(sid, true)
+	StopGames(ss, binutil.FreezeSignal)
+	StartGames(sid, true)
 }

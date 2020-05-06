@@ -1,6 +1,6 @@
-// +build windows
+// +Build windows
 
-package main
+package cmd
 
 import (
 	"syscall"
@@ -11,6 +11,6 @@ import (
 const (
 	// BinaryExtension extension used on windows
 	BinaryExtension = ".exe"
-	// StopSignal syscall used to stop server
+	// StopSignal syscall used to Stop server
 	StopSignal = syscall.SIGKILL
 )

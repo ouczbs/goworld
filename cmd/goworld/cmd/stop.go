@@ -1,4 +1,4 @@
-package main
+package cmd
 
 import (
 	"os"
@@ -8,11 +8,11 @@ import (
 	"github.com/ouczbs/goworld/cmd/goworld/process"
 )
 
-func stop(sid ServerID) {
-	stopWithSignal(sid, StopSignal)
+func Stop(sid ServerID) {
+	StopWithSignal(sid, StopSignal)
 }
 
-func stopWithSignal(sid ServerID, signal syscall.Signal) {
+func StopWithSignal(sid ServerID, signal syscall.Signal) {
 	err := os.Chdir(env.GoWorldRoot)
 	checkErrorOrQuit(err, "chdir to goworld directory failed")
 
@@ -20,53 +20,53 @@ func stopWithSignal(sid ServerID, signal syscall.Signal) {
 	showServerStatus(ss)
 	if !ss.IsRunning() {
 		// server is not running
-		showMsgAndQuit("no server is running currently")
+		ShowMsgAndQuit("no server is running currently")
 	}
 
 	if ss.ServerID != "" && ss.ServerID != sid {
-		showMsgAndQuit("another server is running: %s", ss.ServerID)
+		ShowMsgAndQuit("another server is running: %s", ss.ServerID)
 	}
 
-	stopGates(ss, signal)
-	stopGames(ss, signal)
-	stopDispatcher(ss, signal)
+	StopGates(ss, signal)
+	StopGames(ss, signal)
+	StopDispatcher(ss, signal)
 }
 
-func stopGames(ss *ServerStatus, signal syscall.Signal) {
+func StopGames(ss *ServerStatus, signal syscall.Signal) {
 	if ss.NumGamesRunning == 0 {
 		return
 	}
 
-	showMsg("stop %d games ...", ss.NumGamesRunning)
+	ShowMsg("Stop %d games ...", ss.NumGamesRunning)
 	for _, proc := range ss.GameProcs {
-		stopProc(proc, signal)
+		StopProc(proc, signal)
 	}
 }
 
-func stopDispatcher(ss *ServerStatus, signal syscall.Signal) {
+func StopDispatcher(ss *ServerStatus, signal syscall.Signal) {
 	if ss.NumDispatcherRunning == 0 {
 		return
 	}
 
-	showMsg("stop dispatcher ...")
+	ShowMsg("Stop dispatcher ...")
 	for _, proc := range ss.DispatcherProcs {
-		stopProc(proc, signal)
+		StopProc(proc, signal)
 	}
 }
 
-func stopGates(ss *ServerStatus, signal syscall.Signal) {
+func StopGates(ss *ServerStatus, signal syscall.Signal) {
 	if ss.NumGatesRunning == 0 {
 		return
 	}
 
-	showMsg("stop %d gates ...", ss.NumGatesRunning)
+	ShowMsg("Stop %d gates ...", ss.NumGatesRunning)
 	for _, proc := range ss.GateProcs {
-		stopProc(proc, signal)
+		StopProc(proc, signal)
 	}
 }
 
-func stopProc(proc process.Process, signal syscall.Signal) {
-	showMsg("stop process %s pid=%d", proc.Executable(), proc.Pid())
+func StopProc(proc process.Process, signal syscall.Signal) {
+	ShowMsg("Stop process %s pid=%d", proc.Executable(), proc.Pid())
 
 	proc.Signal(signal)
 	for {

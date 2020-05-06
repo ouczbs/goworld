@@ -1,12 +1,11 @@
-// +build !windows
+// +Build !windows
 
-package main
+package cmd
 
-import "syscall"
-
+/*
 const (
 	// BinaryExtension extension used on unix
 	BinaryExtension = ""
-	// StopSignal syscall used to stop server
+	// StopSignal syscall used to Stop server
 	StopSignal = syscall.SIGTERM
-)
+)*/

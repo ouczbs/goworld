@@ -8,9 +8,6 @@ import (
 
 	"unsafe"
 
-	"github.com/pkg/errors"
-	"github.com/xiaonanln/go-aoi"
-	timer "github.com/xiaonanln/goTimer"
 	"github.com/ouczbs/goworld/engine/common"
 	"github.com/ouczbs/goworld/engine/consts"
 	"github.com/ouczbs/goworld/engine/dispatchercluster"
@@ -20,6 +17,9 @@ import (
 	"github.com/ouczbs/goworld/engine/post"
 	"github.com/ouczbs/goworld/engine/proto"
 	"github.com/ouczbs/goworld/engine/storage"
+	"github.com/pkg/errors"
+	"github.com/xiaonanln/go-aoi"
+	timer "github.com/xiaonanln/goTimer"
 	"github.com/xiaonanln/typeconv"
 )
 

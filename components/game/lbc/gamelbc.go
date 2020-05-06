@@ -7,11 +7,8 @@ import (
 
 	"time"
 
-	"github.com/shirou/gopsutil/process"
-	"github.com/ouczbs/goworld/engine/dispatchercluster"
 	"github.com/ouczbs/goworld/engine/gwlog"
-	"github.com/ouczbs/goworld/engine/gwutils"
-	"github.com/ouczbs/goworld/engine/proto"
+	"github.com/shirou/gopsutil/process"
 )
 
 func Initialize(ctx context.Context, collectInterval time.Duration) {
@@ -22,18 +19,18 @@ func Initialize(ctx context.Context, collectInterval time.Duration) {
 	}
 	gwlog.Infof("gamelbc: found game process: %s", p)
 
-	go gwutils.RepeatUntilPanicless(func() {
-		for {
-			time.Sleep(collectInterval)
-			pcnt, err := p.CPUPercentWithContext(ctx)
-			if err != nil {
-				gwlog.Panicf("gamelbc: get process cpu percent failed: %s", err)
-			}
-
-			gwlog.Debugf("gamelbc: cpu percent is %.3f%%", pcnt)
-			dispatchercluster.SendGameLBCInfo(proto.GameLBCInfo{
-				CPUPercent: pcnt,
-			})
-		}
-	})
+	//go gwutils.RepeatUntilPanicless(func() {
+	//	for {
+	//		time.Sleep(collectInterval)
+	//		pcnt, err := p.CPUPercentWithContext(ctx)
+	//		if err != nil {
+	//			gwlog.Panicf("gamelbc: get process cpu percent failed: %s", err)
+	//		}
+	//
+	//		gwlog.Debugf("gamelbc: cpu percent is %.3f%%", pcnt)
+	//		dispatchercluster.SendGameLBCInfo(proto.GameLBCInfo{
+	//			CPUPercent: pcnt,
+	//		})
+	//	}
+	//})
 }

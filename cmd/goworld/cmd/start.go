@@ -1,4 +1,4 @@
-package main
+package cmd
 
 import (
 	"io/ioutil"
@@ -13,32 +13,34 @@ import (
 	"github.com/ouczbs/goworld/engine/config"
 	"github.com/ouczbs/goworld/engine/consts"
 )
-
-func start(sid ServerID) {
+var arguments struct {
+	runInDaemonMode bool
+}
+func Start(sid ServerID) {
 	err := os.Chdir(env.GoWorldRoot)
 	checkErrorOrQuit(err, "chdir to goworld directory failed")
 
 	ss := detectServerStatus()
 	if ss.NumDispatcherRunning > 0 || ss.NumGatesRunning > 0 {
-		status()
-		showMsgAndQuit("server is already running, can not start multiple servers")
+		Status()
+		ShowMsgAndQuit("server is already running, can not Start multiple servers")
 	}
 
-	startDispatchers()
-	startGames(sid, false)
-	startGates()
+	StartDispatchers()
+	//StartGames(sid, false)
+	StartGates()
 }
 
-func startDispatchers() {
-	showMsg("start dispatchers ...")
+func StartDispatchers() {
+	ShowMsg("Start dispatchers ...")
 	dispatcherIds := config.GetDispatcherIDs()
-	showMsg("dispatcher ids: %v", dispatcherIds)
+	ShowMsg("dispatcher ids: %v", dispatcherIds)
 	for _, dispid := range dispatcherIds {
-		startDispatcher(dispid)
+		StartDispatcher(dispid)
 	}
 }
 
-func startDispatcher(dispid uint16) {
+func StartDispatcher(dispid uint16) {
 	cfg := config.GetDispatcher(dispid)
 	args := []string{"-dispid", strconv.Itoa(int(dispid))}
 	if arguments.runInDaemonMode {
@@ -46,20 +48,20 @@ func startDispatcher(dispid uint16) {
 	}
 	cmd := exec.Command(env.GetDispatcherBinary(), args...)
 	err := runCmdUntilTag(cmd, cfg.LogFile, consts.DISPATCHER_STARTED_TAG, time.Second*10)
-	checkErrorOrQuit(err, "start dispatcher failed, see dispatcher.log for error")
+	checkErrorOrQuit(err, "Start dispatcher failed, see dispatcher.log for error")
 }
 
-func startGames(sid ServerID, isRestore bool) {
-	showMsg("start games ...")
+func StartGames(sid ServerID, isRestore bool) {
+	ShowMsg("Start games ...")
 	desiredGames := config.GetDeployment().DesiredGames
-	showMsg("desired games = %d", desiredGames)
+	ShowMsg("desired games = %d", desiredGames)
 	for gameid := uint16(1); int(gameid) <= desiredGames; gameid++ {
-		startGame(sid, gameid, isRestore)
+		StartGame(sid, gameid, isRestore)
 	}
 }
 
-func startGame(sid ServerID, gameid uint16, isRestore bool) {
-	showMsg("start game %d ...", gameid)
+func StartGame(sid ServerID, gameid uint16, isRestore bool) {
+	ShowMsg("Start game %d ...", gameid)
 
 	gameExePath := filepath.Join(sid.Path(), sid.Name()+BinaryExtension)
 	args := []string{"-gid", strconv.Itoa(int(gameid))}
@@ -71,20 +73,20 @@ func startGame(sid ServerID, gameid uint16, isRestore bool) {
 	}
 	cmd := exec.Command(gameExePath, args...)
 	err := runCmdUntilTag(cmd, config.GetGame(gameid).LogFile, consts.GAME_STARTED_TAG, time.Second*600)
-	checkErrorOrQuit(err, "start game failed, see game.log for error")
+	checkErrorOrQuit(err, "Start game failed, see game.log for error")
 }
 
-func startGates() {
-	showMsg("start gates ...")
+func StartGates() {
+	ShowMsg("Start gates ...")
 	desiredGates := config.GetDeployment().DesiredGates
-	showMsg("desired gates = %d", desiredGates)
+	ShowMsg("desired gates = %d", desiredGates)
 	for gateid := uint16(1); int(gateid) <= desiredGates; gateid++ {
-		startGate(gateid)
+		StartGate(gateid)
 	}
 }
 
-func startGate(gateid uint16) {
-	showMsg("start gate %d ...", gateid)
+func StartGate(gateid uint16) {
+	ShowMsg("Start gate %d ...", gateid)
 
 	args := []string{"-gid", strconv.Itoa(int(gateid))}
 	if arguments.runInDaemonMode {
@@ -92,7 +94,7 @@ func startGate(gateid uint16) {
 	}
 	cmd := exec.Command(env.GetGateBinary(), args...)
 	err := runCmdUntilTag(cmd, config.GetGate(gateid).LogFile, consts.GATE_STARTED_TAG, time.Second*10)
-	checkErrorOrQuit(err, "start gate failed, see gate.log for error")
+	checkErrorOrQuit(err, "Start gate failed, see gate.log for error")
 }
 
 func runCmdUntilTag(cmd *exec.Cmd, logFile string, tag string, timeout time.Duration) (err error) {
@@ -111,7 +113,7 @@ func runCmdUntilTag(cmd *exec.Cmd, logFile string, tag string, timeout time.Dura
 		}
 	}
 
-	err = errors.Errorf("wait started tag timeout")
+	err = errors.Errorf("wait Started tag timeout")
 	return
 }
 

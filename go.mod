@@ -1,7 +1,9 @@
 module github.com/ouczbs/goworld
 
 go 1.14
+
 replace github.com/ouczbs/goworld => ../goworld
+
 require (
 	github.com/StackExchange/wmi v0.0.0-20190523213315-cbe66965904d // indirect
 	github.com/bmizerany/assert v0.0.0-20160611221934-b7ed37b82869
@@ -11,6 +13,8 @@ require (
 	github.com/go-ini/ini v1.51.0
 	github.com/go-ole/go-ole v1.2.4
 	github.com/go-sql-driver/mysql v1.4.1
+	github.com/gogo/protobuf v1.3.1
+	github.com/golang/protobuf v1.4.0
 	github.com/golang/snappy v0.0.1
 	github.com/kardianos/osext v0.0.0-20190222173326-2bc1f35cddc0 // indirect
 	github.com/klauspost/cpuid v1.2.1 // indirect
@@ -38,6 +42,7 @@ require (
 	golang.org/x/net v0.0.0-20191126235420-ef20fe5d7933
 	golang.org/x/sys v0.0.0-20191128015809-6d18c012aee9
 	google.golang.org/appengine v1.6.5 // indirect
+	google.golang.org/protobuf v1.22.0
 	gopkg.in/eapache/queue.v1 v1.1.0 // indirect
 	gopkg.in/ini.v1 v1.51.0 // indirect
 	gopkg.in/mgo.v2 v2.0.0-20190816093944-a6b53ec6cb22

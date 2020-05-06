@@ -1,0 +1,117 @@
+syntax = "proto3";
+package pb;
+option go_package = ".;pb";
+enum CommandList
+{
+	// MT_SET_GAME_ID is a message type for game
+	MT_SYSTEM_SERVICE_MSG_TYPE_START = 0;
+
+	MT_SET_GAME_ID = 1;
+	// MT_SET_GATE_ID is a message type for gate
+	MT_SET_GATE_ID = 2;
+	// MT_NOTIFY_CREATE_ENTITY is a message type for creating entities
+	MT_NOTIFY_CREATE_ENTITY = 3;
+	// MT_NOTIFY_DESTROY_ENTITY is a message type for destroying entities
+	MT_NOTIFY_DESTROY_ENTITY = 4;
+	// MT_KVREG_REGISTER is a message type for declaring services
+	MT_KVREG_REGISTER = 5;
+	// MT_UNDECLARE_SERVICE is a message type for undeclaring services
+	MT_UNDECLARE_SERVICE = 6;
+
+	// MT_CREATE_ENTITY_SOMEWHERE is a message type for creating entities
+	MT_CREATE_ENTITY_SOMEWHERE = 7;
+	// MT_LOAD_ENTITY_SOMEWHERE is a message type loading entities
+	MT_LOAD_ENTITY_SOMEWHERE = 8;
+	// MT_NOTIFY_CLIENT_CONNECTED is a message type for clients
+	MT_NOTIFY_CLIENT_CONNECTED = 9;
+	// MT_NOTIFY_CLIENT_DISCONNECTED is a message type for clients
+	MT_NOTIFY_CLIENT_DISCONNECTED = 10;
+
+	// MT_SYNC_POSITION_YAW_FROM_CLIENT is a message type for clients
+	MT_SYNC_POSITION_YAW_FROM_CLIENT = 11;
+	// MT_NOTIFY_ALL_GAMES_CONNECTED is a message type to notify all games connected
+	MT_NOTIFY_ALL_GAMES_CONNECTED  = 12;
+	// NOT USED ANYMORE
+	// MT_NOTIFY_GATE_DISCONNECTED is a message type to notify gate disconnected
+	MT_NOTIFY_GATE_DISCONNECTED = 13;
+	// MT_START_FREEZE_GAME is a message type for hot swapping
+	MT_START_FREEZE_GAME = 14;
+	// MT_START_FREEZE_GAME_ACK is a message type for hot swapping
+	MT_START_FREEZE_GAME_ACK = 15;
+
+	// Message types for migrating
+	// MT_MIGRATE_REQUEST is a message type for entity migrations
+	MT_MIGRATE_REQUEST = 16;
+	// MT_REAL_MIGRATE is a message type for entity migrations
+	MT_REAL_MIGRATE = 17;
+	// MT_QUERY_SPACE_GAMEID_FOR_MIGRATE is a message type for entity migrations
+	MT_QUERY_SPACE_GAMEID_FOR_MIGRATE = 18;
+	MT_CANCEL_MIGRATE = 19;
+
+	// MT_CALL_NIL_SPACES message is used to call nil spaces on all games
+	MT_CALL_NIL_SPACES = 20;
+	// MT_SET_GAME_ID_ACK is sent by dispatcher to game to ACK MT_SET_GAME_ID message
+	MT_SET_GAME_ID_ACK = 21;
+	// MT_NOTIFY_GAME_CONNECTED is sent by dispatcher to game to notify new game connected
+	MT_NOTIFY_GAME_CONNECTED = 22;
+	MT_NOTIFY_GAME_DISCONNECTED = 23;
+	MT_NOTIFY_DEPLOYMENT_READY = 24;
+	// MT_GAME_LBC_INFO contains game load balacing info
+	MT_GAME_LBC_INFO = 25;
+
+	// MT_GATE_SERVICE_MSG_TYPE_START is the first message types that should be handled by GateService
+	MT_GATE_SERVICE_MSG_TYPE_START = 1000;
+
+	// MT_REDIRECT_TO_GATEPROXY_MSG_TYPE_START is the first message type that should be redirected to client proxy
+	MT_REDIRECT_TO_GATEPROXY_MSG_TYPE_START = 1001;
+	// MT_CREATE_ENTITY_ON_CLIENT message type
+	MT_CREATE_ENTITY_ON_CLIENT = 1002;
+	// MT_DESTROY_ENTITY_ON_CLIENT message type
+	MT_DESTROY_ENTITY_ON_CLIENT = 1003;
+	// MT_NOTIFY_MAP_ATTR_CHANGE_ON_CLIENT message type
+	MT_NOTIFY_MAP_ATTR_CHANGE_ON_CLIENT = 1004;
+	// MT_NOTIFY_MAP_ATTR_DEL_ON_CLIENT message type
+	MT_NOTIFY_MAP_ATTR_DEL_ON_CLIENT = 1005;
+	// MT_NOTIFY_LIST_ATTR_CHANGE_ON_CLIENT message type
+	MT_NOTIFY_LIST_ATTR_CHANGE_ON_CLIENT = 1006;
+	// MT_NOTIFY_LIST_ATTR_POP_ON_CLIENT message type
+	MT_NOTIFY_LIST_ATTR_POP_ON_CLIENT = 1007;
+	// MT_NOTIFY_LIST_ATTR_APPEND_ON_CLIENT message type
+	MT_NOTIFY_LIST_ATTR_APPEND_ON_CLIENT = 1008;
+
+	// MT_SET_CLIENTPROXY_FILTER_PROP message type
+	MT_SET_CLIENTPROXY_FILTER_PROP = 1009;
+	// MT_CLEAR_CLIENTPROXY_FILTER_PROPS message type
+	MT_CLEAR_CLIENTPROXY_FILTER_PROPS = 1010;
+	// MT_NOTIFY_MAP_ATTR_CLEAR_ON_CLIENT message type
+	MT_NOTIFY_MAP_ATTR_CLEAR_ON_CLIENT = 1011;
+	// MT_REDIRECT_TO_GATEPROXY_MSG_TYPE_STOP message type
+	MT_REDIRECT_TO_GATEPROXY_MSG_TYPE_STOP = 1499;
+
+
+
+	// MT_CALL_FILTERED_CLIENTS message type: messages to be processed by GateService from Dispatcher, but not redirected to clients
+	MT_CALL_FILTERED_CLIENTS = 1501;
+
+	// MT_SYNC_POSITION_YAW_ON_CLIENTS message type
+	MT_SYNC_POSITION_YAW_ON_CLIENTS = 1502;
+	// MT_GATE_SERVICE_MSG_TYPE_STOP message type
+	MT_GATE_SERVICE_MSG_TYPE_STOP = 1999;
+
+
+
+	// MT_SET_CLIENT_CLIENTID message is sent to client to set its clientid
+	MT_SET_CLIENT_CLIENTID = 2001;
+
+	MT_UDP_SYNC_CONN_NOTIFY_CLIENTID = 2002;
+	MT_UDP_SYNC_CONN_NOTIFY_CLIENTID_ACK = 2003;
+	// MT_HEARTBEAT_FROM_CLIENT is sent by client to notify the gate server that the client is alive
+	MT_HEARTBEAT_FROM_CLIENT = 2004;
+}
+
+message WrapPacket
+{
+  CommandList cmd   = 1; // 协议编号
+  bytes   content   = 2; // 协议二进制
+  uint32  code      = 5; // 错误码
+}

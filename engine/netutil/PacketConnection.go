@@ -12,11 +12,11 @@ import (
 
 	"sync/atomic"
 
-	"github.com/pkg/errors"
 	"github.com/ouczbs/goworld/engine/consts"
 	"github.com/ouczbs/goworld/engine/gwioutil"
 	"github.com/ouczbs/goworld/engine/gwlog"
 	"github.com/ouczbs/goworld/engine/opmon"
+	"github.com/pkg/errors"
 )
 
 const (
@@ -115,6 +115,7 @@ func (pc *PacketConnection) Flush(reason string) (err error) {
 		packet := packets[0]
 
 		err = gwioutil.WriteAll(pc.conn, packet.data())
+		gwlog.Debugf(" send package  length = %d ; data = %s " ,packet.GetPayloadLen(),packet.bytes[_PREPAYLOAD_SIZE : _PREPAYLOAD_SIZE+packet.GetPayloadLen()])
 		packet.Release()
 		if err == nil {
 			err = pc.conn.Flush()
@@ -124,6 +125,7 @@ func (pc *PacketConnection) Flush(reason string) (err error) {
 
 	for _, packet := range packets {
 		gwioutil.WriteAll(pc.conn, packet.data())
+		gwlog.Debugf(" send package  length = %d ; data = %s " ,packet.GetPayloadLen(),packet.bytes[_PREPAYLOAD_SIZE : _PREPAYLOAD_SIZE+packet.GetPayloadLen()])
 		packet.Release()
 	}
 

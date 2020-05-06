@@ -10,7 +10,6 @@ import (
 	"sync/atomic"
 	"unsafe"
 
-	"github.com/pkg/errors"
 	"github.com/ouczbs/goworld/engine/common"
 	"github.com/ouczbs/goworld/engine/config"
 	"github.com/ouczbs/goworld/engine/consts"
@@ -19,6 +18,7 @@ import (
 	"github.com/ouczbs/goworld/engine/gwutils"
 	"github.com/ouczbs/goworld/engine/netutil"
 	"github.com/ouczbs/goworld/engine/proto"
+	"github.com/pkg/errors"
 )
 
 const (

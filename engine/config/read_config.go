@@ -1,6 +1,7 @@
 package config
 
 import (
+	"runtime"
 	"strings"
 
 	"strconv"
@@ -18,9 +19,9 @@ import (
 	"path"
 
 	"github.com/go-ini/ini"
-	"github.com/pkg/errors"
 	"github.com/ouczbs/goworld/engine/common"
 	"github.com/ouczbs/goworld/engine/gwlog"
+	"github.com/pkg/errors"
 )
 
 const (
@@ -658,4 +659,16 @@ func validateConfig(config *GoWorldConfig) {
 			gwlog.Fatalf("found %d dispatchers in config file, but dispatcher%d is not found. dispatcherid must be 1~%d", dispatchersNum, dispatcherid, dispatchersNum)
 		}
 	}
+}
+func CurrentFile() string {
+	_, file, _, ok := runtime.Caller(1)
+	if !ok {
+		return ""
+	}
+	return file
+}
+func init()  {
+	capath := CurrentFile()
+	configFilePath = strings.Replace(capath, "engine/config/read_config.go" , configFilePath,1)
+	gwlog.Debugf("configFilePath := %s",configFilePath)
 }

@@ -1,4 +1,4 @@
-package main
+package cmd
 
 import (
 	"encoding/json"
@@ -88,12 +88,12 @@ func goListModule() (*ModuleInfo, error) {
 func _detectGoWorldPath() string {
 	mi, err := goListModule()
 	if err == nil {
-		showMsg("go list -m -json: %+v", *mi)
+		ShowMsg("go list -m -json: %+v", *mi)
 		return mi.Dir
 	}
 
 	searchPaths := getGoSearchPaths()
-	showMsg("go search paths: %s", strings.Join(searchPaths, string(os.PathListSeparator)))
+	ShowMsg("go search paths: %s", strings.Join(searchPaths, string(os.PathListSeparator)))
 	for _, sp := range searchPaths {
 		goworldPath := filepath.Join(sp, "src", "github.com", "xiaonanln", "goworld")
 		if isdir(goworldPath) {
@@ -103,13 +103,13 @@ func _detectGoWorldPath() string {
 	return ""
 }
 
-func detectGoWorldPath() {
+func DetectGoWorldPath() {
 	env.GoWorldRoot = _detectGoWorldPath()
 	if env.GoWorldRoot == "" {
-		showMsgAndQuit("goworld directory is not detected")
+		ShowMsgAndQuit("goworld directory is not detected")
 	}
 
-	showMsg("goworld directory found: %s", env.GoWorldRoot)
+	ShowMsg("goworld directory found: %s", env.GoWorldRoot)
 	configFile := filepath.Join(env.GoWorldRoot, "goworld.ini")
 	config.SetConfigFile(configFile)
 }

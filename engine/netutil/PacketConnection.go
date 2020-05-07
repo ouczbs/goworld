@@ -23,6 +23,7 @@ const (
 	_MAX_PACKET_SIZE    = 25 * 1024 * 1024 // _MAX_PACKET_SIZE is the max size limit of packets in packet connections
 	_SIZE_FIELD_SIZE    = 4                // _SIZE_FIELD_SIZE is the packet size field (uint32) size
 	_PREPAYLOAD_SIZE    = _SIZE_FIELD_SIZE
+	_PREPAYLOAD_RESRTVE = 2
 	_MAX_PAYLOAD_LENGTH = _MAX_PACKET_SIZE - _PREPAYLOAD_SIZE
 )
 

@@ -2,6 +2,10 @@ syntax = "proto3";
 package pb;
 option go_package = ".;pb";
 
+message SET_GATE_ID
+{
+  uint32  GateId   = 1;
+}
 message SET_GAME_ID
 {
   uint32  GameId   = 1;
@@ -10,10 +14,13 @@ message SET_GAME_ID
   bool   IsBanBootEntity  = 4 ;
   repeated string  EntityIdList   = 5; 
 }
-
-message SET_GATE_ID
+message SET_GAME_ID_ACK
 {
-  uint32  GateId   = 1;
+  uint32  dispid   = 1;
+  bool   isDeploymentReady  = 2;
+  repeated uint32  connectedGameIDs  = 3 ;
+  repeated string  rejectEntities  = 4 ;
+  map<string, string> kvregRegisterMap = 5;
 }
 message NOTIFY_CREATE_ENTITY
 {

@@ -1,6 +1,7 @@
 package dispatcherclient
 
 import (
+	"github.com/ouczbs/goworld/engine/proto/pb"
 	"github.com/xiaonanln/netconnutil"
 	"net"
 
@@ -44,4 +45,21 @@ func newDispatcherClient(dctype DispatcherClientType, conn net.Conn, isReconnect
 // Close the dispatcher client
 func (dc *DispatcherClient) Close() error {
 	return dc.GoWorldConnection.Close()
+}
+func (dc *DispatcherClient) SendSetGameID(dcm * DispatcherConnMgr) error{
+	data := &pb.SET_GAME_ID{
+		GameId:uint32(dcm.gid),
+		IsReconnect:dcm.isReconnect,
+		IsRestore:dcm.isRestoreGame,
+		IsBanBootEntity:dcm.isBanBootEntity,
+	}
+	eids := dcm.delegate.GetEntityIDsForDispatcher(dcm.dispid)
+	for _, eid := range  eids{
+		data.EntityIdList = append(data.EntityIdList, string(eid))
+	}
+	return proto.SendPackageWithPbMessage( dc.GoWorldConnection , data)
+}
+func (dc *DispatcherClient) SendSetGateID(id uint16) error {
+	data := &pb.SET_GATE_ID{GateId: uint32(id)}
+	return proto.SendPackageWithPbMessage(dc.GoWorldConnection, data)
 }

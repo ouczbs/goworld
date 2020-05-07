@@ -109,9 +109,10 @@ enum CommandList
 	MT_HEARTBEAT_FROM_CLIENT = 2004;
 }
 
-message WrapPacket
+message WrapMessage
 {
   CommandList cmd   = 1; // 协议编号
-  bytes   content   = 2; // 协议二进制
-  uint32  code      = 5; // 错误码
+  CommandList CmdAck   = 2; // 协议编号
+  bytes   content   = 3; // 协议二进制
+  uint32  code      = 4; // 错误码
 }

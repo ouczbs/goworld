@@ -153,7 +153,9 @@ func (p *Packet) UnwrittenPayload() []byte {
 func (p *Packet) TotalPayload() []byte {
 	return p.bytes[_PREPAYLOAD_SIZE:]
 }
-
+func (p *Packet) MessagePayload() []byte {
+	return p.bytes[_PREPAYLOAD_SIZE + _PREPAYLOAD_RESRTVE:]
+}
 // UnreadPayload returns the unread payload
 func (p *Packet) UnreadPayload() []byte {
 	pos := p.readCursor + _PREPAYLOAD_SIZE
@@ -358,7 +360,6 @@ func (p *Packet) ReadBytes(size uint32) []byte {
 	p.readCursor += size
 	return bytes
 }
-
 // AppendEntityID appends one Entity ID to the end of payload
 func (p *Packet) AppendEntityID(id common.EntityID) {
 	if len(id) != common.ENTITYID_LENGTH {

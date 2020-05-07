@@ -62,7 +62,6 @@ func (dcm *DispatcherConnMgr) setDispatcherClient(dispatcherClient *DispatcherCl
 func (dcm *DispatcherConnMgr) String() string {
 	return fmt.Sprintf("DispatcherConnMgr<%d>", dcm.dispid)
 }
-
 func (dcm *DispatcherConnMgr) assureConnected() *DispatcherClient {
 	//gwlog.Debugf("assureConnected: _dispatcherClient", _dispatcherClient)
 	var err error
@@ -76,7 +75,7 @@ func (dcm *DispatcherConnMgr) assureConnected() *DispatcherClient {
 		}
 		dcm.setDispatcherClient(dc)
 		if dcm.dctype == GameDispatcherClientType {
-			dc.SendSetGameID(dcm.gid, dcm.isReconnect, dcm.isRestoreGame, dcm.isBanBootEntity, dcm.delegate.GetEntityIDsForDispatcher(dcm.dispid))
+			dc.SendSetGameID(dcm)
 		} else {
 			dc.SendSetGateID(dcm.gid)
 		}

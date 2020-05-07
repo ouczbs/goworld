@@ -410,10 +410,6 @@ func (service *DispatcherService) getConnectedGameIDs() (gameids []uint16) {
 	return
 }
 
-//
-//func (service *DispatcherService) sendSetGameIDAck(pkt *netutil.Packet) {
-//}
-
 func (service *DispatcherService) sendNotifyGameConnected(gameid uint16) {
 	pkt := proto.MakeNotifyGameConnectedPacket(gameid)
 	service.broadcastToGamesExcept(pkt, gameid)

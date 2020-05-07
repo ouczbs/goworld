@@ -1,6 +1,8 @@
 package dispatcher
 
 import (
+	"github.com/ouczbs/goworld/engine/common"
+	"github.com/ouczbs/goworld/engine/proto/pb"
 	"github.com/xiaonanln/netconnutil"
 	"net"
 
@@ -79,4 +81,18 @@ func (dcp *dispatcherClientProxy) String() string {
 	} else {
 		return fmt.Sprintf("dispatcherClientProxy<%s>", dcp.RemoteAddr())
 	}
+}
+func (dcp *dispatcherClientProxy) SendSetGameIDAck(dispid uint16, isDeploymentReady bool, connectedGameIDs []uint16, rejectEntities []common.EntityID, kvregRegisterMap map[string]string) error {
+	data := &pb.SET_GAME_ID_ACK{
+		Dispid: uint32(dispid),
+		IsDeploymentReady: isDeploymentReady,
+		KvregRegisterMap: kvregRegisterMap,
+	}
+	for _, cid := range  connectedGameIDs{
+		data.ConnectedGameIDs = append(data.ConnectedGameIDs, uint32(cid))
+	}
+	for _, rid := range  rejectEntities{
+		data.RejectEntities = append(data.RejectEntities, string(rid))
+	}
+	return proto.SendPackageWithPbMessage(dcp.GoWorldConnection , data)
 }

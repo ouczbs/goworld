@@ -112,7 +112,8 @@ enum CommandList
 message WrapMessage
 {
   CommandList cmd   = 1; // 协议编号
-  CommandList CmdAck   = 2; // 协议编号
-  bytes   content   = 3; // 协议二进制
-  uint32  code      = 4; // 错误码
+  uint32  request   = 2 ; //请求ID
+  uint32  response   = 3 ; //回复ID
+  bytes   content   = 4; // 协议二进制
+  uint32  code      = 5; // 错误码
 }

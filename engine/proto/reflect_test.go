@@ -2,33 +2,39 @@ package proto
 
 import (
 	"fmt"
+	"github.com/ouczbs/goworld/engine/proto/pb"
+	"strings"
 
+	//"google.golang.org/protobuf/reflect/protoreflect"
 	"google.golang.org/protobuf/reflect/protoregistry"
 	"reflect"
 	"testing"
 )
-
-func TestReflect(t *testing.T) {
+func TestReflect2(t *testing.T) {
 	//MessageType
 	//protoregistry.GlobalTypes.FindMessageByName
+	messagetowrap()
+}
+func messagetowrap() error{
 	message,err := protoregistry.GlobalTypes.FindMessageByName("pb.SET_GATE_ID")
 	if err != nil {
-		return
+		return err
 	}
-	pb2 := message.New()
-	//eface := *(*emptyInterface)(unsafe.Pointer(&i))
-	// t :=toType
-	/*
-		mi := &MessageInfo{
-			Desc:          legacyLoadMessageDesc(t, name),
-			GoReflectType: t,
-		}
-	*/
-	pb3 := pb2.Interface()
-	//pbn := pb3.(* pb.SET_GATE_ID)
-	pb4 := pb3.ProtoReflect()
-	pb4.Interface()
-	//pb5 := pb4.(* protolib.Message)
-	a := reflect.TypeOf(pb4)
-	fmt.Println(pb2 ,pb3 ,pb4 ,a)
+	//ark := message.New().(*pb.SET_GATE_ID)
+	//fmt.Println(ark)
+	inte := message.New().Interface()
+	reltype := reflect.ValueOf(inte)
+	ack,ok := inte.(*pb.SET_GATE_ID)
+	if !ok {
+		fmt.Println("error")
+		return err
+	}
+	fmt.Println(ack ,ok)
+	ack.GateId =2
+	res := pb.CommandList_name[2]
+	res = strings.Replace(res, "MT_" , "pb." , 1)
+	fmt.Println(ack ,	res)
+	fmt.Println(reltype.Elem(),reltype.Kind(),reltype.String())
+	fmt.Println(message)
+	return nil
 }

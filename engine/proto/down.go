@@ -1,8 +1,8 @@
 package proto
 
 import (
-	protolib "github.com/gogo/protobuf/proto"
 	"github.com/ouczbs/goworld/engine/proto/pb"
+	protolib "google.golang.org/protobuf/proto"
 )
 
 func RecvPbWrapMessage(bytes []byte) * pb.WrapMessage{

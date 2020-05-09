@@ -17,30 +17,31 @@ type GoWorldConnection struct {
 	packetConn   *netutil.PacketConnection
 	closed       xnsyncutil.AtomicBool
 	autoFlushing bool
-	downHandles  * DownHandles
 }
 // NewGoWorldConnection creates a GoWorldConnection using network connection
 func NewGoWorldConnection(conn netutil.Connection) *GoWorldConnection {
 	return &GoWorldConnection{
 		packetConn: netutil.NewPacketConnection(conn),
-		downHandles: &DownHandles{},
 	}
 }
-
 func (gwc *GoWorldConnection) NewPacket() * netutil.Packet{
 	return gwc.packetConn.NewPacket()
 }
-func (gwc *GoWorldConnection) ParseMessage(packet * netutil.Packet){
-	wrapbytes := packet.MessagePayload()
-	wrapmessage := RecvPbWrapMessage(wrapbytes)
-	cmd := uint16(wrapmessage.Cmd)
-	//cmdack := uint16(wrapmessage.CmdAck)
-	if cmd != 0 {
-		//message := protolib.MessageType("pb.SET_GATE_ID")
-		//pb2:=message.New()
-		//RecvPbMessage(wrapmessage.Content, pb2 )
-		//message := RecvPbMessage(wrapmessage.Content , )
+func (gwc *GoWorldConnection) HandleMessage(packet * netutil.Packet){
+	wrapBytes := packet.MessagePayload()
+	wrapMessage := RecvPbWrapMessage(wrapBytes)
+	cmd := uint32(wrapMessage.Cmd)
+	handle := pbMessageHandles[cmd]
+	responseHandle := pbMessageHandles[wrapMessage.Response]
+	if cmd == 0 || (handle == nil && responseHandle == nil ) {
+		return
 	}
+	pbMessage,err := newPbMessage(wrapMessage.Cmd)
+	if err != nil {
+		return
+	}
+	RecvPbMessage(wrapMessage.Content, pbMessage)
+	handle(&pbMessage)
 }
 // SendNotifyCreateEntity sends MT_NOTIFY_CREATE_ENTITY message
 func (gwc *GoWorldConnection) SendNotifyCreateEntity(id common.EntityID) error {

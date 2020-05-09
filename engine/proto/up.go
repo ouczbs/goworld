@@ -1,12 +1,12 @@
 package proto
 
 import (
-	protolib "github.com/gogo/protobuf/proto"
 	"github.com/ouczbs/goworld/engine/netutil"
+	protolib "google.golang.org/protobuf/proto"
 )
 //length with 2 bytes ,not exit on down
 func appendReservedText(packet * netutil.Packet){
-	packet.AppendUint16(0)
+	packet.AppendUint16(1)
 }
 func SendPackageWithPbMessage(gwc *GoWorldConnection,pb protolib.Message)error{
 	packet := gwc.NewPacket()

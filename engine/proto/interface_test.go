@@ -2,8 +2,8 @@ package proto
 
 import (
 	"fmt"
-	protolib "github.com/golang/protobuf/proto"
 	"github.com/ouczbs/goworld/engine/proto/pb"
+	protolib "google.golang.org/protobuf/proto"
 	"reflect"
 	"testing"
 )

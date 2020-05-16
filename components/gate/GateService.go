@@ -240,6 +240,10 @@ func (gs *GateService) onClientProxyClose(cp *ClientProxy) {
 func (gs *GateService) handleClientProxyPacket(cp *ClientProxy, msgtype proto.MsgType, pkt *netutil.Packet) {
 	cp.heartbeatTime = time.Now()
 	switch msgtype {
+	case proto.MT_TO_GAME:
+
+	case proto.MT_HEART:
+
 	case proto.MT_SYNC_POSITION_YAW_FROM_CLIENT:
 		gs.handleSyncPositionYawFromClient(pkt)
 	case proto.MT_CALL_ENTITY_METHOD_FROM_CLIENT:

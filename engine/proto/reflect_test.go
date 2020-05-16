@@ -3,6 +3,7 @@ package proto
 import (
 	"fmt"
 	"github.com/ouczbs/goworld/engine/proto/pb"
+	protolib "google.golang.org/protobuf/proto"
 	"strings"
 
 	//"google.golang.org/protobuf/reflect/protoreflect"
@@ -31,9 +32,13 @@ func messagetowrap() error{
 	}
 	fmt.Println(ack ,ok)
 	ack.GateId =2
+	buf,err := protolib.Marshal(ack)
+	test := protolib.Unmarshal(buf , inte)
 	res := pb.CommandList_name[2]
 	res = strings.Replace(res, "MT_" , "pb." , 1)
-	fmt.Println(ack ,	res)
+	pb2,ok2 := inte.(*pb.SET_GATE_ID)
+	fmt.Println(pb2 , ok2)
+	fmt.Println(ack ,	res , test, inte , reflect.TypeOf(inte))
 	fmt.Println(reltype.Elem(),reltype.Kind(),reltype.String())
 	fmt.Println(message)
 	return nil

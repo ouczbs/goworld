@@ -17,10 +17,17 @@ type Message struct {
 }
 
 const (
-	// MT_INVALID is the invalid message type
 	MT_INVALID = iota
+	MT_HEART
+	MT_ENGINE
+	MT_TO_GAME
+	MT_TO_CLIENT
+)
+
+const (
+	// MT_INVALID is the invalid message type
+	MT_SET_GAME_ID = 100 + iota
 	// MT_SET_GAME_ID is a message type for game
-	MT_SET_GAME_ID
 	// MT_SET_GATE_ID is a message type for gate
 	MT_SET_GATE_ID
 	// MT_NOTIFY_CREATE_ENTITY is a message type for creating entities

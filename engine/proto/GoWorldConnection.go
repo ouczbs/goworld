@@ -41,7 +41,7 @@ func (gwc *GoWorldConnection) HandleMessage(packet * netutil.Packet){
 		return
 	}
 	RecvPbMessage(wrapMessage.Content, pbMessage)
-	handle(&pbMessage)
+	//handle(&pbMessage)
 }
 // SendNotifyCreateEntity sends MT_NOTIFY_CREATE_ENTITY message
 func (gwc *GoWorldConnection) SendNotifyCreateEntity(id common.EntityID) error {
